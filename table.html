@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="assets/normalize.css">
     <link rel="stylesheet" href="assets/styles.css">
     <script src="assets/script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+
   </head>
   <body>
     <table>
@@ -18,8 +21,10 @@
             <td>Checking</td>
             <td>Savings</td>
             <td>Cash</td>
+            <td class="total">Totals</td>
          </tr>
          <tr class="subheading">
+          <td>subheading</td>
           <td>subheading</td>
           <td>subheading</td>
           <td>subheading</td>
@@ -27,18 +32,31 @@
        </tr>
         </thead>
       <tr>
-        <td>4/01/20</td>
+        <td>4/01/21</td>
         <td>100</td>
         <td>200</td>
         <td>50</td>
+        <td></td>
       </tr>
       <tr>
-        <td>4/27/20</td>
+        <td>4/02/21</td>
         <td>200</td>
         <td>350</td>
-        <td>55</td>
+        <td>650</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>4/03/21</td>
+        <td>300</td>
+        <td>650</td>
+        <td>65</td>
+        <td></td>
       </tr>
       </tbody>
     </table>
+
+    <div>
+      <canvas id="myChart" width="800" height="400"></canvas>
+    </div>
   </body>
 </html>
