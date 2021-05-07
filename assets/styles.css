@@ -124,6 +124,10 @@ li:hover, a:hover {
   margin-top: 5%;
 }
 
+canvas {
+  margin: 0 auto;
+  padding: 5%;
+  }
 
 /* ====================================
    Media Queries

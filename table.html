@@ -22,36 +22,58 @@
             <td>Savings</td>
             <td>Cash</td>
             <td class="total">Totals</td>
-         </tr>
-         <tr class="subheading">
-          <td>subheading</td>
-          <td>subheading</td>
-          <td>subheading</td>
-          <td>subheading</td>
-          <td>subheading</td>
-       </tr>
+          </tr>
+          <tr class="subheading">
+            <td class="date">subheading</td>
+            <td class="checking" >subheading</td>
+            <td class="savings">subheading</td>
+            <td class="cash">subheading</td>
+            <td class="totals">subheading</td>
+          </tr>
         </thead>
-      <tr>
-        <td>4/01/21</td>
-        <td>100</td>
-        <td>200</td>
-        <td>50</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>4/02/21</td>
-        <td>200</td>
-        <td>350</td>
-        <td>650</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>4/03/21</td>
-        <td>300</td>
-        <td>650</td>
-        <td>65</td>
-        <td></td>
-      </tr>
+        <tr>
+          <td class="date">1/01/21</td>
+          <td class="checking">100</td>
+          <td class="savings">200</td>
+          <td class="cash">50</td>
+          <td class="totals"></td>
+        </tr>
+        <tr>
+          <td class="date">2/01/21</td>
+          <td class="checking">200</td>
+          <td class="savings">350</td>
+          <td class="cash">650</td>
+          <td class="totals"></td>
+        </tr>
+        <tr>
+          <td class="date">3/01/21</td>
+          <td class="checking">300</td>
+          <td class="savings">13</td>
+          <td class="cash">65</td>
+          <td class="totals"></td>
+        </tr>
+        <tr>
+          <td class="date">4/01/21</td>
+          <td class="checking">400</td>
+          <td class="savings">13</td>
+          <td class="cash">65</td>
+          <td class="totals"></td>
+        </tr>
+        <tr>
+          <td class="date">5/01/21</td>
+          <td class="checking">475</td>
+          <td class="savings">13</td>
+          <td class="cash">65</td>
+          <td class="totals"></td>
+        </tr>
+        <tr>
+          <td><input id="date" type="date"/><button onclick="newDate()">Go</button></td>
+          <td><input id="checking" type="number"/><button onclick="newChecking()">Go</button></td>
+          <td><input id="savings" type="number"/><button onclick="newSavings()">Go</button></td>
+          <td><input id="cash" type="number"/><button onclick="newCash()">Go</button></td>
+          <td><input id="totals" type="number"/><button onclick="newTotals()">Go</button></td>
+        </tr>
+
       </tbody>
     </table>
 
