@@ -80,14 +80,15 @@ p {
     margin-bottom: auto;
 }
 
-.nav-buttons {
-  color: #FFF;
-  font-family: Aileron;
+button, .nav-buttons {
+  color: black;
+  font-family: calibri;
   font-size: 20px;
   font-weight: 900;
   letter-spacing: 0.87px;
   list-style-type: none;
   display: inline-flex;
+  margin: 2%;
 }
 
 li {

@@ -67,16 +67,15 @@
           <td class="totals"></td>
         </tr>
         <tr>
-          <td><input id="date" type="date"/><button onclick="newDate()">Go</button></td>
+          <td><input id="date" type="date"/><button onclick="newCheckingEntry()">Go</button></td>
           <td><input id="checking" type="number"/><button onclick="newChecking()">Go</button></td>
           <td><input id="savings" type="number"/><button onclick="newSavings()">Go</button></td>
           <td><input id="cash" type="number"/><button onclick="newCash()">Go</button></td>
           <td><input id="totals" type="number"/><button onclick="newTotals()">Go</button></td>
         </tr>
-
       </tbody>
     </table>
-
+    <button class=button id=update onclick="newEntry()">Update</button>
     <div>
       <canvas id="myChart" width="800" height="400"></canvas>
     </div>

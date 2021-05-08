@@ -2,7 +2,7 @@ console.log('Javascript has successfully ran 🙌');
 
 var ctx = document.getElementById('myChart');
 
-var date = ["1/01/21", "2/01/21", "3/01/21", "4/01/21", "5/01/21"];
+var date = ["2021-01-01", "2021-02-01", "2021-03-01", "2021-04-01", "2021-05-01"];
 var checking = [100, 200, 300, 400, 475];
 var savings = [200, 350, 650, 1023, 975];
 var cash = [50, 13, 65, 120, 25];
@@ -12,40 +12,61 @@ var arrayOfAssets = [checking, savings, cash];
 var checkingObj = {
   name: "Chase Checking",
   history: {
-    "1/01/21": 100,
-    "2/01/21": 200,
-    "3/01/21": 300,
-    "4/01/21": 400, 
-    "5/01/21": 475
+    "2021-01-01": 100,
+    "2021-02-01": 200,
+    "2021-03-01": 300,
+    "2021-04-01": 400, 
+    "2021-05-01": 475
   },
 };
 
 var savingsObj = {
   name: "Chase Savings",
   history: {
-    "1/01/21": 200,
-    "2/01/21": 350,
-    "3/01/21": 650,
-    "4/01/21": 1023, 
-    "5/01/21": 975
+    "2021-01-01": 200,
+    "2021-02-01": 350,
+    "2021-03-01": 650,
+    "2021-04-01": 1023, 
+    "2021-05-01": 975
   },
 };
 
 var cashObj = {
   name: "Cash under the Mattress",
   history: {
-    "1/01/21": 50,
-    "2/01/21": 13,
-    "3/01/21": 65,
-    "4/01/21": 120, 
-    "5/01/21": 25
+    "2021-01-01": 50,
+    "2021-02-01": 13,
+    "2021-03-01": 65,
+    "2021-04-01": 120, 
+    "2021-05-01": 25
   },
 };
 
-function newDate() {
-  var text = document.getElementById("date").value;
-  alert("The user typed '" + text + "'");
+
+// TEMPLATE — need to figure out how to pass object and balance arguments
+function newEntry(object, balance) {
+  if (document.getElementById("date").value == !isNaN){
+    alert("Please enter a valid date")
+    } else {
+    // add line of code: something like: var balance = document.getElementById("checking").value; // NEED TO CONVERT TO INT
+    // add line of code: something like: var object = ...
+    object.history[document.getElementById("date").value] = balance;
+    console.log(object.history);
+  }
 }
+
+// specific to checking and seems to work!!! 
+function newCheckingEntry() {
+  if (document.getElementById("date").value == !isNaN){
+    alert("Please enter a valid date")
+    } else {
+    var balance = document.getElementById("checking").value; // NEED TO CONVERT TO INT
+    checkingObj.history[document.getElementById("date").value] = balance;
+    console.log(checkingObj.history);
+  }
+}
+
+// need to change these functions so that it doesnt return alert but actually adds new data to the dom
 
 function newChecking() {
   var text = document.getElementById("checking").value;
@@ -66,10 +87,6 @@ function newTotals() {
   var text = document.getElementById("totals").value;
   alert("The user typed '" + text + "'");
 }
-
-// window prompt (delete)
-//checkingObj.history[("6/01/21")] = window.prompt("How much: ");
-//console.log(checkingObj.history)
 
 
 // adding each asset types together to generate a total. Uses index position of arrays to calculate totals. E.g. Checking[0] + Savings[0] + Cash[0]
