@@ -1,104 +1,61 @@
-console.log('Javascript has successfully ran 🙌');
-
 var ctx = document.getElementById('myChart');
 
-var date = ["2021-01-01", "2021-02-01", "2021-03-01", "2021-04-01", "2021-05-01"];
-var checking = [100, 200, 300, 400, 475];
-var savings = [200, 350, 650, 1023, 975];
-var cash = [50, 13, 65, 120, 25];
-var arrayOfAssets = [checking, savings, cash];
-
-
-var checkingObj = {
-  name: "Chase Checking",
-  history: {
+var assets = {
+  checking: {
     "2021-01-01": 100,
     "2021-02-01": 200,
     "2021-03-01": 300,
     "2021-04-01": 400, 
     "2021-05-01": 475
   },
-};
-
-var savingsObj = {
-  name: "Chase Savings",
-  history: {
+  savings: {
     "2021-01-01": 200,
     "2021-02-01": 350,
     "2021-03-01": 650,
     "2021-04-01": 1023, 
     "2021-05-01": 975
   },
-};
-
-var cashObj = {
-  name: "Cash under the Mattress",
-  history: {
+  cash: {
     "2021-01-01": 50,
     "2021-02-01": 13,
     "2021-03-01": 65,
     "2021-04-01": 120, 
     "2021-05-01": 25
-  },
-};
-
-
-// TEMPLATE — need to figure out how to pass object and balance arguments
-function newEntry(object, balance) {
-  if (document.getElementById("date").value == !isNaN){
-    alert("Please enter a valid date")
-    } else {
-    // add line of code: something like: var balance = document.getElementById("checking").value; // NEED TO CONVERT TO INT
-    // add line of code: something like: var object = ...
-    object.history[document.getElementById("date").value] = balance;
-    console.log(object.history);
   }
 }
 
-// specific to checking and seems to work!!! 
-function newCheckingEntry() {
-  if (document.getElementById("date").value == !isNaN){
+// TODO: modify so that nothing is added if the value is NaN
+function newEntry() {
+  if ($('#date')[0].value == !isNaN){
     alert("Please enter a valid date")
     } else {
-    var balance = document.getElementById("checking").value; // NEED TO CONVERT TO INT
-    checkingObj.history[document.getElementById("date").value] = balance;
-    console.log(checkingObj.history);
+    var checkingBalance = $('#checking')[0].value; 
+    var savingsBalance = $('#savings')[0].value; 
+    var cashBalance = $('#cash')[0].value; 
+    if (checkingBalance == !isNaN) {
+      console.log("Checking Balance is Empty")
+    } else {
+      assets.checking[$('#date')[0].value] = parseInt(checkingBalance);
+    } 
+    if (savingsBalance == !isNaN) {
+      console.log("Savings Balance is Empty")
+    } else {
+      assets.savings[$('#date')[0].value] = parseInt(savingsBalance);
+    }
+    if (cashBalance == !isNaN) {
+      console.log("Cash Balance is Empty") 
+    } else {
+      assets.cash[$('#date')[0].value] = parseInt(cashBalance);
+    }
+    var table = document.getElementById("NWTable");
+    var totalRowCount = table.rows.length;
+
+    // TODO: Add lines to this function that will automatically add a new row to the table infront of the input row 
+    // document.createElement("tr")[totalRowCount];
+    document.createElement("tr")[totalRowCount-1];
+    console.log(assets)
   }
 }
-
-// need to change these functions so that it doesnt return alert but actually adds new data to the dom
-
-function newChecking() {
-  var text = document.getElementById("checking").value;
-  alert("The user typed '" + text + "'");
-}
-
-function newSavings() {
-  var text = document.getElementById("savings").value;
-  alert("The user typed '" + text + "'");
-}
-
-function newCash() {
-  var text = document.getElementById("cash").value;
-  alert("The user typed '" + text + "'");
-}
-
-function newTotals() {
-  var text = document.getElementById("totals").value;
-  alert("The user typed '" + text + "'");
-}
-
-
-// adding each asset types together to generate a total. Uses index position of arrays to calculate totals. E.g. Checking[0] + Savings[0] + Cash[0]
-// more info: https://stackoverflow.com/questions/32139773/sum-array-of-arrays-matrix-vertically-efficiently-elegantly
-let assetTotals = arrayOfAssets.reduce(function(array1, array2) {
-  return array1.map(function(value, index) {
-    return value + array2[index];
-  });
-});
-
-// checking to ensure totals are correct
-console.log(assetTotals)
 
 // Chart Color Definitions
 const colors = {
@@ -120,29 +77,53 @@ const colors = {
   },
 };
 
+// Plugin that allows chart data to come from an object
+Chart.pluginService.register({
+  beforeInit: function(chart) {
+    var data = chart.config.data;
+    for (var key in assets.checking) {
+        if (assets.checking.hasOwnProperty(key)) {
+            data.labels.push(key);
+            data.datasets[0].data.push(assets.checking[key]);
+        }
+    }
+    for (var key in assets.checking) {
+        if (assets.savings.hasOwnProperty(key)) {
+            data.datasets[1].data.push(assets.savings[key]);
+        }
+    }
+    for (var key in assets.cash) {
+      if (assets.cash.hasOwnProperty(key)) {
+          data.datasets[2].data.push(assets.cash[key]);
+      }
+  }
+  }
+ }
+);
+
 // Chart Rendering
 var myChart = new Chart(ctx, {
-    type: 'line', // other options: pie, line, etc
+    type: 'line', // other options: pie, line, bar, etc
     data: {
-      labels: date,
+      labels: [],
       datasets: [{
         label: 'Checking',
         fill: true,
         backgroundColor: colors.orange.fill,
         borderColor: colors.orange.stroke,
-        data: checking,
+        data: [],
       }, {
-        label: "Savings",
+        label: 'Savings',
         fill: true,
         backgroundColor: colors.darkBlue.fill,
         borderColor: colors.darkBlue.stroke,
-        data: savings,
+        data: [],
       }, {
-        label: "Cash",
+        label: 'Cash',
         fill: true,
         backgroundColor: colors.green.fill,
         borderColor: colors.green.stroke,
-        data: cash,
+        data: [],
       }]
     }, // configuration options to customize the charts such as changing the position of legend, enable/disable responsiveness, control styling, etc.
     options: {
@@ -178,94 +159,6 @@ var myChart = new Chart(ctx, {
               fontSize: 16,
           }
      },
-    } // this is optional
+    } 
   }
 )
-
-
-/* 
-super complicated way of returning the last property value of an object inside another object. This might be unecessary and will likely not be used. more info: https://stackoverflow.com/questions/4317456/getting-the-last-item-in-a-javascript-object
-
-No. Order is not guaranteed in JSON and most other key-value data structures, so therefore the last item could sometimes be carrot and at other times be banana and so on. 
-If you need to rely on ordering, your best bet is to go with arrays. 
-The power of key-value data structures lies in accessing values by their keys, not in being able to get the nth item of the object.
-
-var currentBalance = objectTest.history[Object.keys(objectTest.history)[Object.keys(objectTest.history).length -1]]
-console.log(test)
-*/
-
-
-/*
-// takes the most recent asset totals and puts them into a new array. this breaks stacked charts though
-// let currentAssets = [checking.pop(),savings.pop(),cash.pop()]
-
-//THIS IS OLD stuff I was playing around with
-// option 1 uses formdata
-var formAssets = new FormData();
-
-function addAsset() {
-  formAssets.append('checking', value);
-  formAssets.append('savings', value);
-  formAssets.append('cash', value);
-  formAssets.append('auto', value);
-}
-
-// option 2 uses new operator
-
-function assets(checking, savings, cash, house, crypto, misc) {
-  this.checking = checking;
-  this.savings = savings;
-  this.cash = cash;
-  this.house = house;
-  this.crypto = crypto;
-  this.misc = misc;
-}
-
-const assetsTotal = new assets(4,3,3,2,4,1);
-
-function depreciatingAsset(make, model, year, miles) {
-  this.make = make;
-  this.model = model;
-  this.year = year;
-  this.miles = miles;
-}
-
-const car1 = new Car('Eagle', 'Talon TSi', 1993);
-
-console.log(car1.make);
-// expected output: "Eagle"
-
-function assignChecking() {
-  var checkingBalance = document.getElementById("checking").value;
-  document.getElementById("printChecking").innerHTML = "Your checking balance is: $" + checkingBalance
-}
-
-var savings = 2
-var cash = 201
-var crypto = 123
-var property = 1241
-
-var assets = checking + savings + cash + crypto + property
-
-
-//liabilities
-let auto1 = 0
-var auto2 = 10
-var mortgage = 0
-var creditcards = 0
-var miscLiabilities = 0
-
-var liabilities = auto1 + auto2 + mortgage + creditcards + miscLiabilities
-
-// Historical Values
-
-//NW
-var NW = assets - liabilities
-  
-
-
-//document.getElementById("checking").innerHTML = "Your Net Worth is $" + NW
-//document.getElementById("assets").innerHTML = "Assets: $" + assets
-//document.getElementById("liabilities").innerHTML = "Liabilities: $" + liabilities
-
-*/

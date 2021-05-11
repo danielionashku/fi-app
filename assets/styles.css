@@ -130,6 +130,18 @@ canvas {
   padding: 5%;
   }
 
+/* Hide arrows and spinners for input buttons in Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input { 
+    text-align: center; 
+}
+
+
 /* ====================================
    Media Queries
  ====================================== */
