@@ -24,7 +24,52 @@ var assets = {
   }
 }
 
-// TODO: modify so that nothing is added if the value is NaN
+// TODO: Create function that turns assets & liabilities objects into tables. https://stackoverflow.com/questions/17684201/create-html-table-from-javascript-object/17684427
+
+var liabilities = {
+  creditcard: {
+    "2021-01-01": -1214,
+    "2021-02-01": -800,
+    "2021-03-01": -700,
+    "2021-04-01": -600, 
+    "2021-05-01": -550
+  },
+  autoloan: {
+    "2021-01-01": -22540,
+    "2021-02-01": -22000,
+    "2021-03-01": -21000,
+    "2021-04-01": -20000, 
+    "2021-05-01": -19000
+  },
+  mortgage: {
+    "2021-01-01": -686000,
+    "2021-02-01": -680000,
+    "2021-03-01": -670000,
+    "2021-04-01": -660000, 
+    "2021-05-01": -650000
+  }
+}
+
+function newAsset() {
+  var newasset = $('#newasset')[0].value;
+  if (newasset == !isNaN) {
+    console.log("Please Enter Asset");
+  } else {
+    assets[newasset] = {};
+    console.log(assets);
+  }
+}
+
+function newLiability() {
+  var newliability = $('#newliability')[0].value;
+  if (newliability == !isNaN) {
+    console.log("Please Enter Liability");
+  } else {
+    liabilities[newliability] = {};
+    console.log(liabilities);
+  }
+}
+
 function newEntry() {
   if ($('#date')[0].value == !isNaN){
     alert("Please enter a valid date")
