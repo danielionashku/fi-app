@@ -4,7 +4,7 @@
 }
 
 body {
-  background-image: url(../images/bg.jpg);
+  background-color: #485470;
   background-size: 200%;
   background-repeat: no-repeat;
   text-align: center;
@@ -26,17 +26,18 @@ h1 {
 html, body {
   width: 100%;
 }
+
+/* Table Formatting */
 table {
   margin: 0 auto;
   margin-top: 50px;
 }
 
-
 td, tr {
   box-sizing: border-box;
   height: 30px;
   width: 100px;
-  border: 1px solid #FFBD99;
+  border: 1px solid white;
 }
 
 thead {

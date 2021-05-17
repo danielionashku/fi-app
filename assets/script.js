@@ -4,7 +4,7 @@ var assets = {
   checking: {
     "2021-01-01": 100,
     "2021-02-01": 200,
-    "2021-03-01": 300,
+    "2021-03-01": 0,
     "2021-04-01": 400, 
     "2021-05-01": 475
   },
@@ -17,10 +17,17 @@ var assets = {
   },
   cash: {
     "2021-01-01": 50,
-    "2021-02-01": 13,
+    "2021-02-01": 275,
     "2021-03-01": 65,
     "2021-04-01": 120, 
     "2021-05-01": 25
+  },
+  bitcoin: {
+    "2021-01-01":	0,
+    "2021-02-01":	0,
+    "2021-03-01":	0,
+    "2021-04-01":	0,
+    "2021-05-01":	0
   }
 }
 
@@ -50,12 +57,20 @@ var liabilities = {
   }
 }
 
+var dates = {
+  "2021-01-01":	0,
+  "2021-02-01":	0,
+  "2021-03-01":	0,
+  "2021-04-01":	0,
+  "2021-05-01":	0
+}
+
 function newAsset() {
   var newasset = $('#newasset')[0].value;
   if (newasset == !isNaN) {
     console.log("Please Enter Asset");
   } else {
-    assets[newasset] = {};
+    assets[newasset] = dates;
     console.log(assets);
   }
 }
@@ -65,15 +80,17 @@ function newLiability() {
   if (newliability == !isNaN) {
     console.log("Please Enter Liability");
   } else {
-    liabilities[newliability] = {};
+    liabilities[newliability] = dates;
     console.log(liabilities);
   }
 }
+
 
 function newEntry() {
   if ($('#date')[0].value == !isNaN){
     alert("Please enter a valid date")
     } else {
+    dates[$('#date')[0].value] = 0; // adds the date to the list of dates which is needed to be up to date when a new asset or liability is added
     var checkingBalance = $('#checking')[0].value; 
     var savingsBalance = $('#savings')[0].value; 
     var cashBalance = $('#cash')[0].value; 
@@ -102,7 +119,7 @@ function newEntry() {
   }
 }
 
-// Chart Color Definitions
+// Chart Color Definitions — NOT CURRENTLY USED
 const colors = {
   orange: {
     fill: '#ffa600',
@@ -123,54 +140,38 @@ const colors = {
 };
 
 // Plugin that allows chart data to come from an object
+// TODO update code so that it looks over all the different properties of an object. e.g. like this:
 Chart.pluginService.register({
   beforeInit: function(chart) {
     var data = chart.config.data;
-    for (var key in assets.checking) {
-        if (assets.checking.hasOwnProperty(key)) {
-            data.labels.push(key);
-            data.datasets[0].data.push(assets.checking[key]);
-        }
-    }
-    for (var key in assets.checking) {
-        if (assets.savings.hasOwnProperty(key)) {
-            data.datasets[1].data.push(assets.savings[key]);
-        }
-    }
-    for (var key in assets.cash) {
-      if (assets.cash.hasOwnProperty(key)) {
-          data.datasets[2].data.push(assets.cash[key]);
+    var i = -1;
+    for (k in assets) {
+      data.datasets.push({
+        label: k,
+        fill: true,
+        // backgroundColor: colors.orange.fill, TODO: Need to create random custom colors
+        // borderColor: colors.orange.stroke, TODO: Need to create random custom colors
+        data: [],
+      })
+      i++;
+      for (var key in assets[k]) {
+        if (assets[k].hasOwnProperty(key)) {
+        data.datasets[i].data.push(assets[k][key]);
       }
+    }
   }
-  }
- }
+}
+}
 );
+
 
 // Chart Rendering
 var myChart = new Chart(ctx, {
-    type: 'line', // other options: pie, line, bar, etc
+    type: 'line', 
     data: {
-      labels: [],
-      datasets: [{
-        label: 'Checking',
-        fill: true,
-        backgroundColor: colors.orange.fill,
-        borderColor: colors.orange.stroke,
-        data: [],
-      }, {
-        label: 'Savings',
-        fill: true,
-        backgroundColor: colors.darkBlue.fill,
-        borderColor: colors.darkBlue.stroke,
-        data: [],
-      }, {
-        label: 'Cash',
-        fill: true,
-        backgroundColor: colors.green.fill,
-        borderColor: colors.green.stroke,
-        data: [],
-      }]
-    }, // configuration options to customize the charts such as changing the position of legend, enable/disable responsiveness, control styling, etc.
+      labels: Object.getOwnPropertyNames(dates), // uses all the dates from the dates object
+      datasets: []
+    }, 
     options: {
       responsive: true,
       scales: {

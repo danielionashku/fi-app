@@ -27,8 +27,6 @@
             <td class="totals">subheading</td>
           </tr>
         </thead>
-
-
         <!-- commented out for now because we will replace with data from inside our javascript objects
         <tr>
           <td class="date">1/01/21</td>
@@ -74,16 +72,16 @@
         </tr>
       </tbody>
     </table>
-    <button class=button id=update onclick="newEntry()">Update</button>
+    <button class="button" id=update onclick="newEntry()"><div id="slide"></div>Update</button>
     <div>
       <canvas id="myChart" width="800" height="400"></canvas>
     </div>
     <input id="newasset" type="text" placeholder="New Asset"/>
     <input id="assetamount" type="number" placeholder="Enter Amount"/>
-    <button class=button onclick="newAsset()">Add New Asset</button><br>
+    <button class="button" onclick="newAsset()"><div id="slide"></div>Add New Asset</button><br>
     <input id="newliability" type="text" placeholder="New Liability"/>
     <input id="liabilityamount" type="number" placeholder="Enter Amount"/>
-    <button class=button onclick="newLiability()">Add New Liability</button>
+    <button class="button" onclick="newLiability()"><div id="slide"></div>Add New Liability</button>
   </body>
   <script src="assets/script.js" defer></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
