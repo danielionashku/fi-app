@@ -88,23 +88,19 @@ function newLiability() {
 
 // this will iterate over every type
 function addRow (argument) {
-  if ($('#date')[0].value == !isNaN){
-    // alert("Please enter a valid date")
-    } else {
       var NWTable = document.getElementById("NWTable");
       var currentRow = NWTable.insertRow(NWTable.rows.length -1);
-    
       var everyChild = document.querySelectorAll("#inputRow input");
       for (var i = 0; i < everyChild.length; i++) {
-        var cellID = document.querySelectorAll("#inputRow input")[i].id;
-        currentCell = currentRow.insertCell();
-        var x = document.createElement("input");
-        currentCell.appendChild(x);
-        x.setAttribute("Value", $(`#${cellID}`)[0].value);
-        $(`#${cellID}`)[0].value = "";
+          var cellID = document.querySelectorAll("#inputRow input")[i].id;
+          currentCell = currentRow.insertCell();
+          var x = document.createElement("input");
+          currentCell.appendChild(x);
+          x.setAttribute("Value", $(`#${cellID}`)[0].value);
+          $(`#${cellID}`)[0].value = "";
       };
     }
-  }
+
 
 // specific to assets. will need new function for liabilities
 function newEntry() {
@@ -121,13 +117,13 @@ function newEntry() {
         } else {
           assets[cID][$('#date')[0].value] = parseInt(itemBalance);
         }
-        addRow();
       }
+      addRow();
     }
   };
-
+  
+  
 // Plugin that allows chart data to come from an object
-// TODO update code so that it looks over all the different properties of an object. e.g. like this:
 Chart.pluginService.register({
   beforeInit: function(chart) {
     var data = chart.config.data;
