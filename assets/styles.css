@@ -37,7 +37,7 @@ td, tr {
   box-sizing: border-box;
   height: 30px;
   width: 100px;
-  border: 1px solid white;
+  border: .1px solid white;
 }
 
 thead {
@@ -140,6 +140,12 @@ input::-webkit-inner-spin-button {
 
 input { 
     text-align: center; 
+    background-color: transparent;
+    color: white;
+    font-size: 16px;
+    font-family: sans-serif;
+    border: none;
+
 }
 
 

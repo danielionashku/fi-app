@@ -27,52 +27,17 @@
             <td class="totals">subheading</td>
           </tr>
         </thead>
-        <!-- commented out for now because we will replace with data from inside our javascript objects
-        <tr>
-          <td class="date">1/01/21</td>
-          <td class="checking">100</td>
-          <td class="savings">200</td>
-          <td class="cash">50</td>
-          <td class="totals"></td>
-        </tr>
-        <tr>
-          <td class="date">2/01/21</td>
-          <td class="checking">200</td>
-          <td class="savings">350</td>
-          <td class="cash">650</td>
-          <td class="totals"></td>
-        </tr>
-        <tr>
-          <td class="date">3/01/21</td>
-          <td class="checking">300</td>
-          <td class="savings">13</td>
-          <td class="cash">65</td>
-          <td class="totals"></td>
-        </tr>
-        <tr>
-          <td class="date">4/01/21</td>
-          <td class="checking">400</td>
-          <td class="savings">13</td>
-          <td class="cash">65</td>
-          <td class="totals"></td>
-        </tr>
-        <tr>
-          <td class="date">5/01/21</td>
-          <td class="checking">475</td>
-          <td class="savings">13</td>
-          <td class="cash">65</td>
-          <td class="totals"></td>
-        </tr> -->
-        <tr id="inputrow">
-          <td><input id="date" type="date"/></td>
-          <td><input id="checking" type="number"/></td>
-          <td><input id="savings" type="number"/></td>
-          <td><input id="cash" type="number"/></td>
-          <td><input id="totals" type="number"/></td>
-        </tr>
+          <tr id="inputRow">
+            <td><input id="date" type="date"/></td>
+            <td><input id="checking" type="number"/></td>
+            <td><input id="savings" type="number"/></td>
+            <td><input id="cash" type="number"/></td>
+            <td><input id="totals" type="number"/></td>
+          </tr>
       </tbody>
     </table>
-    <button class="button" id=update onclick="newEntry()"><div id="slide"></div>Update</button>
+    <button class="button" id="update" onclick="newEntry()"><div id="slide"></div>Update</button>
+    <!-- <button class="button" id="addRow" onclick="addRow()"><div id="slide"></div>Add Row</button> -->
     <div>
       <canvas id="myChart" width="800" height="400"></canvas>
     </div>

@@ -86,16 +86,37 @@ function newLiability() {
 }
 
 
+// this will iterate over every type
+function addRow (argument) {
+  if ($('#date')[0].value == !isNaN){
+    alert("Please enter a valid date")
+    } else {
+      var NWTable = document.getElementById("NWTable");
+      var currentRow = NWTable.insertRow(NWTable.rows.length -1);
+    
+      var everyChild = document.querySelectorAll("#inputRow input");
+      for (var i = 0; i < everyChild.length; i++) {
+        var cellID = document.querySelectorAll("#inputRow input")[i].id;
+        currentCell = currentRow.insertCell();
+        var x = document.createElement("input");
+        currentCell.appendChild(x);
+        x.setAttribute("Value", $(`#${cellID}`)[0].value);
+        $(`#${cellID}`)[0].value = "";
+      };
+    }
+  }
+
+// TODO: update function so that it automatically iterates over every col/asset type (similar to the addRow function)
 function newEntry() {
   if ($('#date')[0].value == !isNaN){
     alert("Please enter a valid date")
     } else {
-    dates[$('#date')[0].value] = 0; // adds the date to the list of dates which is needed to be up to date when a new asset or liability is added
+    dates[$('#date')[0].value] = 0; // adds the date to the list of dates 
     var checkingBalance = $('#checking')[0].value; 
     var savingsBalance = $('#savings')[0].value; 
     var cashBalance = $('#cash')[0].value; 
     if (checkingBalance == !isNaN) {
-      console.log("Checking Balance is Empty")
+      console.log("Checking Balance is Empty");
     } else {
       assets.checking[$('#date')[0].value] = parseInt(checkingBalance);
     } 
@@ -105,17 +126,13 @@ function newEntry() {
       assets.savings[$('#date')[0].value] = parseInt(savingsBalance);
     }
     if (cashBalance == !isNaN) {
-      console.log("Cash Balance is Empty") 
+      console.log("Cash Balance is Empty"); 
     } else {
       assets.cash[$('#date')[0].value] = parseInt(cashBalance);
     }
-    var table = document.getElementById("NWTable");
-    var totalRowCount = table.rows.length;
-
-    // TODO: Add lines to this function that will automatically add a new row to the table infront of the input row 
-    // document.createElement("tr")[totalRowCount];
-    document.createElement("tr")[totalRowCount-1];
-    console.log(assets)
+    console.log(assets);
+    addRow();
+    console.log(dates);
   }
 }
 
