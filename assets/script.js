@@ -89,7 +89,7 @@ function newLiability() {
 // this will iterate over every type
 function addRow (argument) {
   if ($('#date')[0].value == !isNaN){
-    alert("Please enter a valid date")
+    // alert("Please enter a valid date")
     } else {
       var NWTable = document.getElementById("NWTable");
       var currentRow = NWTable.insertRow(NWTable.rows.length -1);
@@ -106,55 +106,25 @@ function addRow (argument) {
     }
   }
 
-// TODO: update function so that it automatically iterates over every col/asset type (similar to the addRow function)
+// specific to assets. will need new function for liabilities
 function newEntry() {
   if ($('#date')[0].value == !isNaN){
     alert("Please enter a valid date")
     } else {
     dates[$('#date')[0].value] = 0; // adds the date to the list of dates 
-    var checkingBalance = $('#checking')[0].value; 
-    var savingsBalance = $('#savings')[0].value; 
-    var cashBalance = $('#cash')[0].value; 
-    if (checkingBalance == !isNaN) {
-      console.log("Checking Balance is Empty");
-    } else {
-      assets.checking[$('#date')[0].value] = parseInt(checkingBalance);
-    } 
-    if (savingsBalance == !isNaN) {
-      console.log("Savings Balance is Empty")
-    } else {
-      assets.savings[$('#date')[0].value] = parseInt(savingsBalance);
+    var countChildren = document.querySelectorAll("#inputRow input");
+      for (var i = 1; i < countChildren.length; i++) {
+        var cID = document.querySelectorAll("#inputRow input")[i].id;
+        var itemBalance = $(`#${cID}`)[0].value;
+        if (itemBalance == !isNaN) {
+          console.log(`${cID} Balance is Empty`);
+        } else {
+          assets[cID][$('#date')[0].value] = parseInt(itemBalance);
+        }
+        addRow();
+      }
     }
-    if (cashBalance == !isNaN) {
-      console.log("Cash Balance is Empty"); 
-    } else {
-      assets.cash[$('#date')[0].value] = parseInt(cashBalance);
-    }
-    console.log(assets);
-    addRow();
-    console.log(dates);
-  }
-}
-
-// Chart Color Definitions — NOT CURRENTLY USED
-const colors = {
-  orange: {
-    fill: '#ffa600',
-    stroke: '#e0eadf',
-  },
-  green: {
-    fill: '#A1DF65',
-    stroke: '#e0eadf',
-  },
-  darkBlue: {
-    fill: '#58508d',
-    stroke: '#3282bf',
-  },
-  purple: {
-    fill: '#8fa8c8',
-    stroke: '#75539e',
-  },
-};
+  };
 
 // Plugin that allows chart data to come from an object
 // TODO update code so that it looks over all the different properties of an object. e.g. like this:
