@@ -70,7 +70,8 @@ function addColumn() {
       const cell = document.createElement(i ? "td" : "td")
       cell.appendChild(input)
       row.appendChild(cell)
-      document.getElementById("NWTable").rows[0].cells[row.cells.length-1].innerHTML = $('#newasset')[0].value;
+      var colTitle = document.getElementById("NWTable").rows[0].cells[row.cells.length-1];
+      colTitle.innerHTML = $('#newasset')[0].value;
   });
 }
 
@@ -82,6 +83,9 @@ function newAsset() {
     assets[newasset] = dates;
     console.log(assets);
     addColumn();
+    var addIDtoNewInput = document.querySelector('table tr:last-child td:last-child input')
+    addIDtoNewInput.style.backgroundColor = "red";
+    addIDtoNewInput.setAttribute('id', $('#newasset')[0].value);
   }
 }
 
