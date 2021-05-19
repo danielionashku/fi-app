@@ -31,8 +31,6 @@ var assets = {
   }
 }
 
-// TODO: Create function that turns assets & liabilities objects into tables. https://stackoverflow.com/questions/17684201/create-html-table-from-javascript-object/17684427
-
 var liabilities = {
   creditcard: {
     "2021-01-01": -1214,
@@ -65,6 +63,17 @@ var dates = {
   "2021-05-01":	0
 }
 
+function addColumn() {
+  [...document.querySelectorAll('#NWTable tr')].forEach((row, i) => {
+      const input = document.createElement("input")
+      input.setAttribute('type', 'number')
+      const cell = document.createElement(i ? "td" : "td")
+      cell.appendChild(input)
+      row.appendChild(cell)
+      document.getElementById("NWTable").rows[0].cells[row.cells.length-1].innerHTML = $('#newasset')[0].value;
+  });
+}
+
 function newAsset() {
   var newasset = $('#newasset')[0].value;
   if (newasset == !isNaN) {
@@ -72,6 +81,7 @@ function newAsset() {
   } else {
     assets[newasset] = dates;
     console.log(assets);
+    addColumn();
   }
 }
 
@@ -85,8 +95,7 @@ function newLiability() {
   }
 }
 
-
-// this will iterate over every type
+// this will iterate over every column and add a new row for each
 function addRow (argument) {
       var NWTable = document.getElementById("NWTable");
       var currentRow = NWTable.insertRow(NWTable.rows.length -1);
@@ -101,8 +110,8 @@ function addRow (argument) {
       };
     }
 
-
-// specific to assets. will need new function for liabilities
+// takes the values entered in the input table row and adds them to the assets object. then it runs the addRow() function to create a new row with this data
+// will need to create a similar function for liabilities
 function newEntry() {
   if ($('#date')[0].value == !isNaN){
     alert("Please enter a valid date")
@@ -122,8 +131,7 @@ function newEntry() {
     }
   };
   
-  
-// Plugin that allows chart data to come from an object
+// Third Party plugin that allows chart data to come from an object
 Chart.pluginService.register({
   beforeInit: function(chart) {
     var data = chart.config.data;
@@ -140,13 +148,11 @@ Chart.pluginService.register({
       for (var key in assets[k]) {
         if (assets[k].hasOwnProperty(key)) {
         data.datasets[i].data.push(assets[k][key]);
+        }
       }
     }
   }
-}
-}
-);
-
+});
 
 // Chart Rendering
 var myChart = new Chart(ctx, {
