@@ -9,30 +9,40 @@
     <link rel="stylesheet" href="assets/styles.css">
   </head>
   <body>
-    <table id="NWTable">
+    <table id="assetsTable">
       <tbody>
         <thead>
           <tr class="header">
             <td>Date</td>
-            <td>Checking</td>
-            <td>Savings</td>
-            <td>Cash</td>
+
+          </tr>
+        </thead>
+          <tr>
+            <td></td>
+
+          </tr>
+          <tr id="inputRow">
+            <td><input id="date" type="date"/></td>
+
+          </tr>
+          <tr id="totalsRow">
+            <td>Totals</td>
+
+          </tr>
+      </tbody>
+    </table>
+    <table id="totalsTable">
+      <tbody>
+        <thead>
+          <tr class="header">
             <td>Totals</td>
           </tr>
         </thead>
           <tr>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
           </tr>
-          <tr id="inputRow">
-            <td><input id="date" type="date"/></td>
-            <td><input id="checking" type="number"/></td>
-            <td><input id="savings" type="number"/></td>
-            <td><input id="cash" type="number"/></td>
-            <td><input id="totals" type="number"/></td>
+          <tr>
+            <td><input id="totalassets" type="number"/></td>
           </tr>
       </tbody>
     </table>

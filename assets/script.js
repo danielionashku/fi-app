@@ -1,35 +1,6 @@
 var ctx = document.getElementById('myChart');
 
-var assets = {
-  checking: {
-    "2021-01-01": 100,
-    "2021-02-01": 200,
-    "2021-03-01": 0,
-    "2021-04-01": 400, 
-    "2021-05-01": 475
-  },
-  savings: {
-    "2021-01-01": 200,
-    "2021-02-01": 350,
-    "2021-03-01": 650,
-    "2021-04-01": 1023, 
-    "2021-05-01": 975
-  },
-  cash: {
-    "2021-01-01": 50,
-    "2021-02-01": 275,
-    "2021-03-01": 65,
-    "2021-04-01": 120, 
-    "2021-05-01": 25
-  },
-  bitcoin: {
-    "2021-01-01":	0,
-    "2021-02-01":	0,
-    "2021-03-01":	0,
-    "2021-04-01":	0,
-    "2021-05-01":	0
-  }
-}
+var assets = {};
 
 var liabilities = {
   creditcard: {
@@ -55,7 +26,7 @@ var liabilities = {
   }
 }
 
-var dates = {
+const dates = {
   "2021-01-01":	0,
   "2021-02-01":	0,
   "2021-03-01":	0,
@@ -63,14 +34,26 @@ var dates = {
   "2021-05-01":	0
 }
 
+var totalsassets = {
+  "2021-01-01":	0,
+  "2021-02-01":	0,
+  "2021-03-01":	0,
+  "2021-04-01":	0,
+  "2021-05-01":	0
+}
+
+// variable declarations
+
+var assetsTable = document.getElementById("assetsTable");
+
 function addColumn() {
-  [...document.querySelectorAll('#NWTable tr')].forEach((row, i) => {
+  [...document.querySelectorAll('#assetsTable tr')].forEach((row, i) => {
       const input = document.createElement("input")
       input.setAttribute('type', 'number')
       const cell = document.createElement(i ? "td" : "td")
       cell.appendChild(input)
       row.appendChild(cell)
-      var colTitle = document.getElementById("NWTable").rows[0].cells[row.cells.length-1];
+      var colTitle = document.getElementById("assetsTable").rows[0].cells[row.cells.length-1];
       colTitle.innerHTML = $('#newasset')[0].value;
   });
 }
@@ -80,10 +63,10 @@ function newAsset() {
   if (newasset == !isNaN) {
     console.log("Please Enter Asset");
   } else {
-    assets[newasset] = dates;
+    assets[newasset] = {...dates};
     console.log(assets);
     addColumn();
-    var addIDtoNewInput = document.querySelector('table tr:last-child td:last-child input')
+    var addIDtoNewInput = document.querySelector('table tr:nth-last-child(2) td:last-child input')
     addIDtoNewInput.style.backgroundColor = "red";
     addIDtoNewInput.setAttribute('id', $('#newasset')[0].value);
   }
@@ -101,8 +84,7 @@ function newLiability() {
 
 // this will iterate over every column and add a new row for each
 function addRow (argument) {
-      var NWTable = document.getElementById("NWTable");
-      var currentRow = NWTable.insertRow(NWTable.rows.length -1);
+      var currentRow = assetsTable.insertRow(assetsTable.rows.length -2);
       var everyChild = document.querySelectorAll("#inputRow input");
       for (var i = 0; i < everyChild.length; i++) {
           var cellID = document.querySelectorAll("#inputRow input")[i].id;
@@ -117,24 +99,47 @@ function addRow (argument) {
 // takes the values entered in the input table row and adds them to the assets object. then it runs the addRow() function to create a new row with this data
 // will need to create a similar function for liabilities
 function newEntry() {
-  if ($('#date')[0].value == !isNaN){
+  var date = $('#date')[0].value;
+  if (date == !isNaN){
     alert("Please enter a valid date")
     } else {
-    dates[$('#date')[0].value] = 0; // adds the date to the list of dates 
-    var countChildren = document.querySelectorAll("#inputRow input");
-      for (var i = 1; i < countChildren.length; i++) {
-        var cID = document.querySelectorAll("#inputRow input")[i].id;
+    dates[date] = 0; // adds the date to the list of dates 
+    var countChildren = document.querySelectorAll("#inputRow input:not(#totalassets)");
+      for (var i = 1; i < countChildren.length; i++) { 
+        var cID = document.querySelectorAll("#inputRow input:not(#totalassets)")[i].id;
         var itemBalance = $(`#${cID}`)[0].value;
         if (itemBalance == !isNaN) {
           console.log(`${cID} Balance is Empty`);
         } else {
-          assets[cID][$('#date')[0].value] = parseInt(itemBalance);
+          assets[cID][date] = parseInt(itemBalance);
         }
       }
-      addRow();
     }
+    addRow();
+    addTotals(assets);
+    updateChart(myChart);
   };
-  
+
+
+function addTotals(obj) {
+  var i = 0;
+  var name = [];
+  var propSum = [];
+  for (prop in obj) {
+    name[i] = prop;
+    i += 1;
+    prop = Object.values(obj[prop]);
+    propSum[i-1] = prop.reduce(function(a, b) {
+      return a + b;
+    }, 0);
+  }
+  // TODO: add name + totals to table
+  for (i=0; i<name.length; i++) {
+    console.log(`${name[i]} total: ${propSum[i]}`)
+  }
+}
+
+
 // Third Party plugin that allows chart data to come from an object
 Chart.pluginService.register({
   beforeInit: function(chart) {
@@ -157,6 +162,27 @@ Chart.pluginService.register({
     }
   }
 });
+
+// Updates the chart with new data
+function updateChart(chart) {
+      var i = -1;
+      for (k in assets) {
+        chart.data.datasets.push({
+          label: k,
+          fill: true,
+          // backgroundColor: colors.orange.fill, TODO: Need to create random custom colors
+          // borderColor: colors.orange.stroke, TODO: Need to create random custom colors
+          data: [],
+        })
+        i++;
+        for (var key in assets[k]) {
+          if (assets[k].hasOwnProperty(key)) {
+          chart.data.datasets[i].data.push(assets[k][key]);
+          }
+        }
+      }
+  chart.update();
+}
 
 // Chart Rendering
 var myChart = new Chart(ctx, {
