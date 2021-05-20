@@ -145,18 +145,18 @@ function addTotals(obj) {
 Chart.pluginService.register({
   beforeInit: function(chart) {
     var data = chart.config.data;
-    for (k in assets) {
+    for (prop in assets) {
       data.datasets.push({
-        label: k,
+        label: prop,
         fill: true,
         // backgroundColor: colors.orange.fill, TODO: Need to create random custom colors
         // borderColor: colors.orange.stroke, TODO: Need to create random custom colors
         data: [],
       })
-      for (var key in assets[k]) {
-        var i = -1;
-        if (assets[k].hasOwnProperty(key)) {
-        data.datasets[i].data.push(assets[k][key]);
+      for (var key in assets[prop]) {
+        var i = 0;
+        if (assets[prop].hasOwnProperty(key)) {
+        data.datasets[i].data.push(assets[prop][key]);
         i++;
         }
       }
@@ -173,22 +173,20 @@ function updateChart(chart) {
         data: [],
       })
     }
+    var i = -1;
     for (prop in assets) {
       chart.data.datasets.push({
         label: prop,
         fill: true,
-        // backgroundColor: colors.orange.fill, TODO: Need to create random custom colors
-        // borderColor: colors.orange.stroke, TODO: Need to create random custom colors
+        // backgroundColor:
+        // borderColor:
         data: [],
       })
-        for (var key in assets[prop]) {
-          var i = 0;
-          if (assets[prop].hasOwnProperty(key)) {
-          chart.data.datasets[i].data.push(assets[prop][key]); 
-          i++;
-          }
-        }
+      i++;
+      for (var key in assets[prop]) {
+        chart.data.datasets[i].data.push(assets[prop][key]); 
       }
+    }
   chart.update();
 }
 
