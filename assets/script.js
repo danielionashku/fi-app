@@ -1,10 +1,14 @@
 var ctx = document.getElementById('myChart');
 
-var assets = {};
-var liabilities = {};
-var totalsassets = {};
-var assetsTable = document.getElementById("assetsTable");
-var numAssets = Object.keys(assets).length;
+var networth = {
+  "assets": {},
+  "liabilities": {}
+}
+
+var assetTotals = {};
+var nwTable = document.getElementById("nwTable");
+var numAssets = Object.keys(networth.assets).length;
+var numLiabilities = Object.keys(networth.liabilities).length;
 
 const dates = {
   "2021-01-01":	0,
@@ -14,45 +18,50 @@ const dates = {
   "2021-05-01":	0
 }
 
-function addColumn() {
-  [...document.querySelectorAll('#assetsTable tr')].forEach((row, i) => {
+function addColumn(itemType) {
+  [...document.querySelectorAll('#nwTable tr')].forEach((row, i) => {
       const input = document.createElement("input")
       input.setAttribute('type', 'number')
       const cell = document.createElement(i ? "td" : "td")
       cell.appendChild(input)
       row.appendChild(cell)
-      var colTitle = document.getElementById("assetsTable").rows[0].cells[row.cells.length-1];
-      colTitle.innerHTML = $('#newasset')[0].value;
+      var colTitle = document.getElementById("nwTable").rows[0].cells[row.cells.length-1];
+      // need to check if asset or liability type is passed
+      colTitle.innerHTML = $(`#${itemType}`)[0].value;
   });
 }
 
 function newAsset() {
-  var newasset = $('#newasset')[0].value;
-  if (newasset == !isNaN) {
+  var newAsset = $('#newAsset')[0].value;
+  if (newAsset == !isNaN) {
     console.log("Please Enter Asset");
   } else {
-    assets[newasset] = {...dates};
-    console.log(assets);
-    addColumn();
+    networth.assets[newAsset] = {...dates};
+    console.log(networth.assets);
+    addColumn('newAsset');
     var addIDtoNewInput = document.querySelector('table tr:nth-last-child(2) td:last-child input')
     addIDtoNewInput.style.backgroundColor = "red";
-    addIDtoNewInput.setAttribute('id', $('#newasset')[0].value);
+    addIDtoNewInput.setAttribute('id', $('#newAsset')[0].value);
   }
 }
 
 function newLiability() {
-  var newliability = $('#newliability')[0].value;
-  if (newliability == !isNaN) {
+  var newLiability = $('#newLiability')[0].value;
+  if (newLiability == !isNaN) {
     console.log("Please Enter Liability");
   } else {
-    liabilities[newliability] = dates;
-    console.log(liabilities);
+    networth.liabilities[newLiability] = {...dates};
+    console.log(networth.liabilities);
+    addColumn('newLiability');
+    var addIDtoNewInput = document.querySelector('table tr:nth-last-child(2) td:last-child input')
+    addIDtoNewInput.style.backgroundColor = "red";
+    addIDtoNewInput.setAttribute('id', $('#newLiability')[0].value);
   }
 }
 
-// this will iterate over every column and add a new row for each
+// Iterates over every column and adds a new row for each one
 function addRow (argument) {
-      var currentRow = assetsTable.insertRow(assetsTable.rows.length -2);
+      var currentRow = nwTable.insertRow(nwTable.rows.length -2);
       var everyChild = document.querySelectorAll("#inputRow input");
       for (var i = 0; i < everyChild.length; i++) {
           var cellID = document.querySelectorAll("#inputRow input")[i].id;
@@ -64,26 +73,30 @@ function addRow (argument) {
       };
     }
 
-// takes the values entered in the input table row and adds them to the assets object. then it runs the addRow() function to create a new row with this data
-// will need to create a similar function for liabilities
+// Takes asset & liability values entered in the input table row and adds them to their respective objects.
 function newEntry() {
   var date = $('#date')[0].value;
   if (date == !isNaN){
     alert("Please enter a valid date")
     } else {
     dates[date] = 0; // adds the date to the list of dates
-    var countChildren = document.querySelectorAll("#inputRow input:not(#totalassets)");
+    var countChildren = document.querySelectorAll("#inputRow input:not(#assetTotals)");
       for (var i = 1; i < countChildren.length; i++) { 
-        var cID = document.querySelectorAll("#inputRow input:not(#totalassets)")[i].id;
+        var cID = document.querySelectorAll("#inputRow input:not(#assetTotals)")[i].id;
         var itemBalance = $(`#${cID}`)[0].value;
         if (itemBalance == !isNaN) {
           console.log(`${cID} Balance is Empty`);
         } else {
-          assets[cID][date] = parseInt(itemBalance);
+          if (Object.values(networth)[0].hasOwnProperty(`${cID}`) === true) {
+            networth.assets[cID][date] = parseInt(itemBalance);
+          } else {
+            networth.liabilities[cID][date] = parseInt(itemBalance);
+          }
         }
       }
       addRow();
-      addTotals(assets);
+      addTotals(networth.assets);
+      addTotals(networth.liabilities);
       updateChart(myChart);
     }
   };
@@ -112,49 +125,86 @@ function addTotals(obj) {
 Chart.pluginService.register({
   beforeInit: function(chart) {
     var data = chart.config.data;
-    for (prop in assets) {
+    var i = 0;
+    for (prop in networth.assets) {
       data.datasets.push({
-        label: prop,
-        fill: true,
-        // backgroundColor: colors.orange.fill, TODO: Need to create random custom colors
-        // borderColor: colors.orange.stroke, TODO: Need to create random custom colors
-        data: [],
-      })
-      for (var key in assets[prop]) {
-        var i = 0;
-        if (assets[prop].hasOwnProperty(key)) {
-        data.datasets[i].data.push(assets[prop][key]);
-        i++;
-        }
-      }
-    }
-  }
-});
-
-// Updates the chart with new data
-function updateChart(chart) {
-    for (prop in assets) {
-      chart.data.datasets.pop({
-        label: prop,
-        fill: true,
-        data: [],
-      })
-    }
-    var i = -1;
-    for (prop in assets) {
-      chart.data.datasets.push({
         label: prop,
         fill: true,
         // backgroundColor:
         // borderColor:
         data: [],
       })
-      i++;
-      for (var key in assets[prop]) {
-        chart.data.datasets[i].data.push(assets[prop][key]); 
+      for (var key in networth.assets[prop]) {
+        if (networth.assets[prop].hasOwnProperty(key)) {
+        data.datasets[i].data.push(networth.assets[prop][key]);
+        }
       }
     }
-  chart.update();
+    for (prop in networth.liabilities) {
+      data.datasets.push({
+        label: prop,
+        fill: true,
+        // backgroundColor:
+        // borderColor:
+        data: [],
+      })
+      for (var key in networth.liabilities[prop]) {
+        if (networth.liabilities[prop].hasOwnProperty(key)) {
+        data.datasets[i].data.push(networth.liabilities[prop][key]);
+        }
+      }
+    } i++;
+  }
+});
+
+
+
+
+// Updates the chart with new data
+function updateChart(chart) {
+  for (prop in networth.assets) {
+    chart.data.datasets.pop({
+      label: prop,
+      fill: true,
+      data: [],
+    })
+  }
+  for (prop in networth.liabilities) {
+    chart.data.datasets.pop({
+      label: prop,
+      fill: true,
+      data: [],
+    })
+  }
+  var i = -1;
+  for (prop in networth.assets) {
+    chart.data.datasets.push({
+      label: prop,
+      fill: true,
+      // backgroundColor:
+      // borderColor:
+      data: [],
+    })
+    i++;
+    for (var key in networth.assets[prop]) {
+      chart.data.datasets[i].data.push(networth.assets[prop][key]); 
+    }
+  }
+  var n = i +1;
+  for (prop in networth.liabilities) {
+    chart.data.datasets.push({
+      label: prop,
+      fill: true,
+      // backgroundColor:
+      // borderColor:
+      data: [],
+    })
+    i++;
+    for (var key in networth.liabilities[prop]) {
+      chart.data.datasets[n].data.push(networth.liabilities[prop][key]); 
+    }
+  }
+chart.update();
 }
 
 // Chart Rendering
