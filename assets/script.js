@@ -45,6 +45,7 @@ var totalsassets = {
 // variable declarations
 
 var assetsTable = document.getElementById("assetsTable");
+var numAssets = Object.keys(assets).length;
 
 function addColumn() {
   [...document.querySelectorAll('#assetsTable tr')].forEach((row, i) => {
@@ -114,10 +115,10 @@ function newEntry() {
           assets[cID][date] = parseInt(itemBalance);
         }
       }
+      addRow();
+      addTotals(assets);
+      updateChart(myChart);
     }
-    addRow();
-    addTotals(assets);
-    updateChart(myChart);
   };
 
 
@@ -144,7 +145,6 @@ function addTotals(obj) {
 Chart.pluginService.register({
   beforeInit: function(chart) {
     var data = chart.config.data;
-    var i = -1;
     for (k in assets) {
       data.datasets.push({
         label: k,
@@ -153,10 +153,11 @@ Chart.pluginService.register({
         // borderColor: colors.orange.stroke, TODO: Need to create random custom colors
         data: [],
       })
-      i++;
       for (var key in assets[k]) {
+        var i = -1;
         if (assets[k].hasOwnProperty(key)) {
         data.datasets[i].data.push(assets[k][key]);
+        i++;
         }
       }
     }
@@ -165,19 +166,26 @@ Chart.pluginService.register({
 
 // Updates the chart with new data
 function updateChart(chart) {
-      var i = -1;
-      for (k in assets) {
-        chart.data.datasets.push({
-          label: k,
-          fill: true,
-          // backgroundColor: colors.orange.fill, TODO: Need to create random custom colors
-          // borderColor: colors.orange.stroke, TODO: Need to create random custom colors
-          data: [],
-        })
-        i++;
-        for (var key in assets[k]) {
-          if (assets[k].hasOwnProperty(key)) {
-          chart.data.datasets[i].data.push(assets[k][key]);
+    for (prop in assets) {
+      chart.data.datasets.pop({
+        label: prop,
+        fill: true,
+        data: [],
+      })
+    }
+    for (prop in assets) {
+      chart.data.datasets.push({
+        label: prop,
+        fill: true,
+        // backgroundColor: colors.orange.fill, TODO: Need to create random custom colors
+        // borderColor: colors.orange.stroke, TODO: Need to create random custom colors
+        data: [],
+      })
+        for (var key in assets[prop]) {
+          var i = 0;
+          if (assets[prop].hasOwnProperty(key)) {
+          chart.data.datasets[i].data.push(assets[prop][key]); 
+          i++;
           }
         }
       }
