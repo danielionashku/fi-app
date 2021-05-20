@@ -1,30 +1,10 @@
 var ctx = document.getElementById('myChart');
 
 var assets = {};
-
-var liabilities = {
-  creditcard: {
-    "2021-01-01": -1214,
-    "2021-02-01": -800,
-    "2021-03-01": -700,
-    "2021-04-01": -600, 
-    "2021-05-01": -550
-  },
-  autoloan: {
-    "2021-01-01": -22540,
-    "2021-02-01": -22000,
-    "2021-03-01": -21000,
-    "2021-04-01": -20000, 
-    "2021-05-01": -19000
-  },
-  mortgage: {
-    "2021-01-01": -686000,
-    "2021-02-01": -680000,
-    "2021-03-01": -670000,
-    "2021-04-01": -660000, 
-    "2021-05-01": -650000
-  }
-}
+var liabilities = {};
+var totalsassets = {};
+var assetsTable = document.getElementById("assetsTable");
+var numAssets = Object.keys(assets).length;
 
 const dates = {
   "2021-01-01":	0,
@@ -33,19 +13,6 @@ const dates = {
   "2021-04-01":	0,
   "2021-05-01":	0
 }
-
-var totalsassets = {
-  "2021-01-01":	0,
-  "2021-02-01":	0,
-  "2021-03-01":	0,
-  "2021-04-01":	0,
-  "2021-05-01":	0
-}
-
-// variable declarations
-
-var assetsTable = document.getElementById("assetsTable");
-var numAssets = Object.keys(assets).length;
 
 function addColumn() {
   [...document.querySelectorAll('#assetsTable tr')].forEach((row, i) => {
@@ -104,7 +71,7 @@ function newEntry() {
   if (date == !isNaN){
     alert("Please enter a valid date")
     } else {
-    dates[date] = 0; // adds the date to the list of dates 
+    dates[date] = 0; // adds the date to the list of dates
     var countChildren = document.querySelectorAll("#inputRow input:not(#totalassets)");
       for (var i = 1; i < countChildren.length; i++) { 
         var cID = document.querySelectorAll("#inputRow input:not(#totalassets)")[i].id;
@@ -128,7 +95,7 @@ function addTotals(obj) {
   var propSum = [];
   for (prop in obj) {
     name[i] = prop;
-    i += 1;
+    i++;
     prop = Object.values(obj[prop]);
     propSum[i-1] = prop.reduce(function(a, b) {
       return a + b;
