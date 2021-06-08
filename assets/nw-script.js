@@ -1,8 +1,24 @@
 var ctx = document.getElementById('myChart');
 
 var networth = {
-  "assets": {},
-  "liabilities": {}
+  "assets": {
+    "checking": {
+      "2020-01-05": 50,
+      "2020-02-02": 100,
+      "2020-01-01": 150,
+      "2020-09-15": 200,
+      "2020-03-03": 250
+    }
+  },
+  "liabilities": {
+    "credit": {
+      "2020-10-05": 50,
+      "2020-02-02": 100,
+      "2020-01-01": 150,
+      "2020-09-15": 200,
+      "2020-03-03": 250
+    }
+  }
 }
 
 var assetTotals = {};
@@ -10,29 +26,50 @@ var nwTable = document.getElementById("nwTable");
 var numAssets = Object.keys(networth.assets).length;
 var numLiabilities = Object.keys(networth.liabilities).length;
 
-const dates = {};
+var dates = {
+  "2020-10-05": 50,
+  "2020-02-02": 100,
+  "2020-01-01": 150,
+  "2020-09-15": 200,
+  "2020-03-03": 250
+};
 
 // Ordering the dates for assets and liabilities:
 function orderNW() {
-  var orderedNW = {}
-  orderedNW.assets = {};
-  orderedNW.liabilities = {};
-  orderedNW.assets = Object.keys(networth.assets).sort().reduce(
+  var orderedNW = {
+    "assets": {},
+    "liabilities": {}
+  }
+  for (prop in networth.assets) {
+  orderedNW.assets[prop] = Object.keys(networth.assets[prop]).sort().reduce(
       (obj, key) => { 
-        obj[key] = networth.assets[key];
+        obj[key] = networth.assets[prop][key];
         return obj;
       }, 
       {}
   );
-  orderedNW.liabilities = Object.keys(networth.liabilities).sort().reduce(
+  }
+  for (prop in networth.liabilities) {
+  orderedNW.liabilities[prop] = Object.keys(networth.liabilities[prop]).sort().reduce(
       (obj, key) => { 
-        obj[key] = networth.liabilities[key];
+        obj[key] = networth.liabilities[prop][key];
         return obj;
       }, 
       {}
   );
-  networth = orderedNW;
-  console.log(networth)
+  return orderedNW;
+  }
+}
+
+function orderDates() {
+  var orderedDates = Object.keys(dates).sort().reduce(
+    (obj, key) => { 
+      obj[key] = dates[key]; 
+      return obj;
+    }, 
+    {}
+  );
+  return orderedDates;
 }
 
 function addColumn(itemType) {
@@ -88,7 +125,7 @@ function addRow (argument) {
           x.setAttribute("Value", $(`#${cellID}`)[0].value);
           $(`#${cellID}`)[0].value = "";
       };
-    }
+}
 
 // Takes asset & liability values entered in the input table row and adds them to their respective objects.
 function newEntry() {
@@ -111,13 +148,14 @@ function newEntry() {
           }
         }
       }
+      networth = orderNW();
+      dates = orderDates();
       addRow();
       addTotals(networth.assets);
       addTotals(networth.liabilities);
       updateChart(myChart);
     }
-  };
-
+}
 
 function addTotals(obj) {
   var i = 0;
@@ -136,7 +174,6 @@ function addTotals(obj) {
     console.log(`${name[i]} total: ${propSum[i]}`)
   }
 }
-
 
 // Third Party plugin that allows chart data to come from an object
 Chart.pluginService.register({
@@ -173,9 +210,6 @@ Chart.pluginService.register({
     } i++;
   }
 });
-
-
-
 
 // Updates the chart with new data
 function updateChart(chart) {
@@ -269,5 +303,4 @@ var myChart = new Chart(ctx, {
           }
      },
     } 
-  }
-)
+})
