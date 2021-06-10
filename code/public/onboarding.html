@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <head>
+    <title>FI APP</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="assets/normalize.css">
+    <link rel="stylesheet" href="assets/styles.css">
+    <script src="assets/script.js" defer></script>
+  </head>
+  <body>
+  	<div class="module-1"></div>
+    <h1 id="heading">Onboarding</h1><br><br>   
+    <form action='' method="post">
+      <label>Checking: </label>
+      <input type="number" id="checking" name="checking" required><br><br>
+      <input type="submit" onclick="assignChecking();" />
+    </form>
+
+    <form action='' method="post">
+      <label>Add New Asset </label>
+      <input type="text" id="asset" name="asset" required><br><br>
+      <input type="submit" onclick="addAsset();" />
+    </form>
+    
+    <p id=printChecking></p>
+
+
+
+    <ul class="nav-buttons">
+  		<li><a href="#">Income</a></li>
+  		<li><a href="#">Spending</a></li>
+  		<li><a href="#">Budget</a></li>
+  		<li><a href="#">FI</a></li>
+      <li><a href="#">Dashboard</a></li>
+  	</ul>
+    <div class="module-2"></div>
+  </body>
+</html>
