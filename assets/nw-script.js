@@ -1,38 +1,16 @@
 var ctx = document.getElementById('myChart');
 
 var networth = {
-  "assets": {
-    "checking": {
-      "2020-01-05": 50,
-      "2020-02-02": 100,
-      "2020-01-01": 150,
-      "2020-09-15": 200,
-      "2020-03-03": 250
-    }
-  },
-  "liabilities": {
-    "credit": {
-      "2020-10-05": 50,
-      "2020-02-02": 100,
-      "2020-01-01": 150,
-      "2020-09-15": 200,
-      "2020-03-03": 250
-    }
-  }
+  "assets": {},
+  "liabilities": {}
 }
+
+var dates = {}
 
 var assetTotals = {};
 var nwTable = document.getElementById("nwTable");
 var numAssets = Object.keys(networth.assets).length;
 var numLiabilities = Object.keys(networth.liabilities).length;
-
-var dates = {
-  "2020-10-05": 50,
-  "2020-02-02": 100,
-  "2020-01-01": 150,
-  "2020-09-15": 200,
-  "2020-03-03": 250
-};
 
 // Ordering the dates for assets and liabilities:
 function orderNW() {
@@ -140,6 +118,11 @@ function newEntry() {
         var itemBalance = $(`#${cID}`)[0].value;
         if (itemBalance == !isNaN) {
           console.log(`${cID} Balance is Empty`);
+          if (Object.values(networth)[0].hasOwnProperty(`${cID}`) === true) {
+            networth.assets[cID][date] = 0;
+          } else {
+            networth.liabilities[cID][date] = 0;
+          }
         } else {
           if (Object.values(networth)[0].hasOwnProperty(`${cID}`) === true) {
             networth.assets[cID][date] = parseInt(itemBalance);
