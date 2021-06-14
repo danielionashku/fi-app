@@ -133,8 +133,11 @@ function newEntry() {
       addRow();
       addTotals(networth.assets);
       addTotals(networth.liabilities);
-      if (Object.keys(networth.assets).length > 0 && Object.keys(networth.liabilities).length > 0) {
+      if (Object.keys(networth.assets).length > 0) {
         networth.assets = orderAssets();
+        dates = orderDates();
+      }
+      if (Object.keys(networth.liabilities).length > 0) {
         networth.liabilities = orderLiabilities();
         dates = orderDates();
       }
@@ -161,15 +164,19 @@ function addTotals(obj) {
   }
 }
 
-// function addTotals2(obj) {
-  
-//   for (prop in obj) {
-//     var name = prop // e.g. "checking"
-//     var lastDate = Object.keys(prop).pop() // e.g. "6/10/2021"
-//     console.log(name)
-//     console.log(lastDate)
-//   }
-// }
+// Returns the last date and value for all liabilities or assets (pass "networth.assets" or "networth.liabilities" into the function)
+function latestBalance(obj) {
+  var i = 0;
+  var name = [];
+  for (prop in obj) {
+    name[i] = prop;
+    i++;
+    lastDate = Object.keys(obj[prop]).pop();
+    lastValue = Object.values(obj[prop]).pop();
+    lastName = name.pop();
+    console.log(`${lastName} has a balance of $${lastValue} as of ${lastDate}`)
+  }
+}
 
 // Third Party plugin that allows chart data to come from an object
 Chart.pluginService.register({

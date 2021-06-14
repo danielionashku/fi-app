@@ -12,4 +12,7 @@ app
   .use(express.urlencoded({ extended: false}))
   .use(express.json())
   
+  .post('/api/user', console.log(test))
+
+
   .listen(port, () => console.log(`Server listening on port ${port}`));

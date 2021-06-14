@@ -21,6 +21,43 @@
   		<li><a href="nw.html">Net Worth</a></li>
       <li><a href="#">Dashboard</a></li></li>
   	</ul>
+    <div>
+      <canvas id="myChart" width="800" height="400"></canvas>
+    </div>
     <div class="module-2"></div>
+      <table id="nwTable">
+        <tbody>
+          <thead>
+            <tr class="header">
+              <td>Date</td>
+  
+            </tr>
+          </thead>
+            <tr>
+              <td></td>
+  
+            </tr>
+            <tr id="inputRow">
+              <td><input id="date" type="date"/></td>
+  
+            </tr>
+            <tr id="totalsRow">
+              <td>Totals</td>
+            </tr>
+        </tbody>
+      </table>
+      <form action="data.php" method="POST"></form>
+        <button class="button" id="update" onclick="newEntry()"><div id="slide"></div>Update</button>
+        <input id="newAsset" type="text" placeholder="New Asset"/>
+        <input id="assetamount" type="number" placeholder="Enter Amount"/>
+        <button class="button" onclick="newAsset()"><div id="slide"></div>Add New Asset</button><br>
+        <input id="newLiability" type="text" placeholder="New Liability"/>
+        <input id="liabilityamount" type="number" placeholder="Enter Amount"/>
+        <button class="button" onclick="newLiability()">Add New Liability</button>
+      </form>
   </body>
+  <script src="./assets/nw-script.js" defer></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 </html>
