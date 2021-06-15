@@ -75,6 +75,7 @@ function newAsset() {
     addIDtoNewInput.style.backgroundColor = "red";
     addIDtoNewInput.setAttribute('id', $('#newAsset')[0].value);
   }
+  document.getElementById("newAsset").value = '';
 }
 
 function newLiability() {
@@ -88,6 +89,7 @@ function newLiability() {
     addIDtoNewInput.style.backgroundColor = "red";
     addIDtoNewInput.setAttribute('id', $('#newLiability')[0].value);
   }
+  document.getElementById("newLiability").value = '';
 }
 
 // Iterates over every column and adds a new row for each one
@@ -133,6 +135,8 @@ function newEntry() {
       addRow();
       addTotals(networth.assets);
       addTotals(networth.liabilities);
+      totalAssets(networth.assets);
+      totalLiabilities(networth.liabilities);
       if (Object.keys(networth.assets).length > 0) {
         networth.assets = orderAssets();
         dates = orderDates();
@@ -164,18 +168,49 @@ function addTotals(obj) {
   }
 }
 
-// Returns the last date and value for all liabilities or assets (pass "networth.assets" or "networth.liabilities" into the function)
-function latestBalance(obj) {
+// Returns the last date and value for all assets (pass "networth.assets" into the function)
+function totalAssets(obj) {
   var i = 0;
   var name = [];
+  var newArrayWithBalances = [];
   for (prop in obj) {
     name[i] = prop;
     i++;
     lastDate = Object.keys(obj[prop]).pop();
     lastValue = Object.values(obj[prop]).pop();
+    newArrayWithBalances.push(lastValue);
     lastName = name.pop();
     console.log(`${lastName} has a balance of $${lastValue} as of ${lastDate}`)
   }
+  var total = 0;
+	for (let i in newArrayWithBalances) {
+      total += newArrayWithBalances[i];
+    }
+    document.getElementById("assets").innerHTML = `Total Assets: $${total}`;
+}
+
+// Returns the last date and value for all liabilities (pass "networth.liabilities" into the function)
+function totalLiabilities(obj) {
+  var i = 0;
+  var name = [];
+  var newArrayWithBalances = [];
+  for (prop in obj) {
+    name[i] = prop;
+    i++;
+    lastDate = Object.keys(obj[prop]).pop();
+    lastValue = Object.values(obj[prop]).pop();
+    newArrayWithBalances.push(lastValue);
+    lastName = name.pop();
+    console.log(`${lastName} has a balance of $${lastValue} as of ${lastDate}`)
+  }
+  var total = 0;
+	for (let i in newArrayWithBalances) {
+      total += newArrayWithBalances[i];
+    }
+    if (total < 0) {
+      total = total * -1
+    }
+  document.getElementById("liabilities").innerHTML = `Total Liabilities: -$${total}`;
 }
 
 // Third Party plugin that allows chart data to come from an object
