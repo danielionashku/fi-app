@@ -74,8 +74,14 @@ function newAsset() {
     var addIDtoNewInput = document.querySelector('table tr:nth-last-child(2) td:last-child input')
     addIDtoNewInput.style.backgroundColor = "red";
     addIDtoNewInput.setAttribute('id', $('#newAsset')[0].value);
+
+    // this code should add an ID to the totals row but its currently broken so be careful
+    var addIDtoTotalsRow = document.querySelector('#totalsRow td:last-child input')
+    addIDtoTotalsRow.setAttribute('id', $('#newAsset')[0].value + "Total");
+    addIDtoTotalsRow.parentElement.innerHTML = "tbd"
   }
-  document.getElementById("newAsset").value = '';
+  // TODO: Set timer to ensure this doesnt run until after the data is stored in the backend
+  // document.getElementById("newAsset").value = '';
 }
 
 function newLiability() {
@@ -88,8 +94,19 @@ function newLiability() {
     var addIDtoNewInput = document.querySelector('table tr:nth-last-child(2) td:last-child input')
     addIDtoNewInput.style.backgroundColor = "red";
     addIDtoNewInput.setAttribute('id', $('#newLiability')[0].value);
+
+    // this code should add an ID to the totals row but its currently broken so be careful
+    var addIDtoTotalsRow = document.querySelector('#totalsRow td:last-child input')
+    addIDtoTotalsRow.setAttribute('id', $('#newLiability')[0].value + "Total");
+    addIDtoTotalsRow.parentElement.innerHTML = "tbd"
   }
-  document.getElementById("newLiability").value = '';
+  // TODO: Set timer to ensure this doesnt run until after the data is stored in the backend
+  // document.getElementById("newLiability").value = '';
+}
+
+function addNew() {
+  newAsset();
+  newLiability();
 }
 
 // Iterates over every column and adds a new row for each one
@@ -162,9 +179,8 @@ function addTotals(obj) {
       return a + b;
     }, 0);
   }
-    //  Figure out how to grab the last cell in the column and add the total to that cell
   for (i=0; i<name.length; i++) {
-    console.log(`${name[i]} total: ${propSum[i]}`)
+    console.log(`${name[i]} total: $${propSum[i]}`)
   }
 }
 
@@ -182,11 +198,11 @@ function totalAssets(obj) {
     lastName = name.pop();
     console.log(`${lastName} has a balance of $${lastValue} as of ${lastDate}`)
   }
-  var total = 0;
+  var totalAssets = 0;
 	for (let i in newArrayWithBalances) {
-      total += newArrayWithBalances[i];
+    totalAssets += newArrayWithBalances[i];
     }
-    document.getElementById("assets").innerHTML = `Total Assets: $${total}`;
+    document.getElementById("assets").innerHTML = `Total Assets: $${totalAssets}`;
 }
 
 // Returns the last date and value for all liabilities (pass "networth.liabilities" into the function)
@@ -203,14 +219,14 @@ function totalLiabilities(obj) {
     lastName = name.pop();
     console.log(`${lastName} has a balance of $${lastValue} as of ${lastDate}`)
   }
-  var total = 0;
+  var totalLiabilities = 0;
 	for (let i in newArrayWithBalances) {
-      total += newArrayWithBalances[i];
+    totalLiabilities += newArrayWithBalances[i];
     }
-    if (total < 0) {
-      total = total * -1
+    if (totalLiabilities < 0) {
+      totalLiabilities = totalLiabilities * -1
     }
-  document.getElementById("liabilities").innerHTML = `Total Liabilities: -$${total}`;
+  document.getElementById("liabilities").innerHTML = `Total Liabilities: -$${totalLiabilities}`;
 }
 
 // Third Party plugin that allows chart data to come from an object

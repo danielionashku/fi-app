@@ -2,9 +2,15 @@ const express = require('express');
 const morgan = require('morgan');
 const { Prohairesis } = require('prohairesis');
 const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8080;
+
+const mySQLString = process.env.CLEARDB_DATABASE_URL;
+const database = new Prohairesis(mySQLString);
 
 app
   .use(morgan('dev'))
@@ -12,7 +18,44 @@ app
   .use(express.urlencoded({ extended: false}))
   .use(express.json())
   
-  .post('/api/user', console.log(test))
+  .get('/api/fi-app', async(req,res) => {
+    const users = await database.query(`
+      SELECT
+          *
+      FROM
+          User
+      ORDER BY
+          date_added DESC
+    `);
+
+    res.contentType('html');
+
+    res.end(`
+      ${users.map((user) => {
+        return `<p>${user.new_asset} & ${user.new_liability} have been added.</p>`;
+      }).join('')}
+    `)
+  })
+
+  .post('/api/fi-app', async (req, res) => {
+    const body = req.body;
+
+    await database.execute(`
+      INSERT INTO User (
+        new_asset,
+        new_liability,
+        date_added
+      ) VALUES (
+        @newAsset,
+        @newLiability,
+        NOW()
+      )
+    `, {
+      newAsset: body.newAsset,
+      newLiability: body.newLiability,
+    })
+    res.end('Added Assets & Liabilities');
+  })
 
 
   .listen(port, () => console.log(`Server listening on port ${port}`));
