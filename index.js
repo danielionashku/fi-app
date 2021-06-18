@@ -18,6 +18,7 @@ app
   .use(express.urlencoded({ extended: false}))
   .use(express.json())
   
+  
   .get('/api/fi-app', async(req,res) => {
     const users = await database.query(`
       SELECT
@@ -41,21 +42,50 @@ app
     const body = req.body;
 
     await database.execute(`
+
       INSERT INTO User (
         new_asset,
         new_liability,
+        date_test,
         date_added
       ) VALUES (
         @newAsset,
         @newLiability,
+        @dateTest,
         NOW()
       )
     `, {
       newAsset: body.newAsset,
       newLiability: body.newLiability,
+      dateTest: body.date,
     })
     res.end('Added Assets & Liabilities');
   })
+
+  // This doesnt work right now
+  // .post('/api/fi-app', async (req, res) => {
+  //   const body = req.body;
+
+  //   await database.execute(`
+
+  //     INSERT INTO nwamounts (
+  //       item_name,
+  //       date,
+  //       item_amount,
+  //       date_added
+  //     ) VALUES (
+  //       @itemName,
+  //       @date,
+  //       @itemAmount,
+  //       NOW()
+  //     )
+  //   `, {
+  //     itemName: body.cID,
+  //     date: body.date,
+  //     itemAmount: body.itemBalance,
+  //   })
+  //   res.end('Added Assets & Liabilities');
+  // })
 
 
   .listen(port, () => console.log(`Server listening on port ${port}`));

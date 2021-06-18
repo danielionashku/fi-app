@@ -38,22 +38,24 @@
               <td></td>
   
             </tr>
-            <tr id="inputRow">
-              <td><input id="date" type="date"/></td>
-  
-            </tr>
+            <form action="/api/fi-app" method="POST" id="nwValue">
+              <tr id="inputRow">
+                <td><input name="date" id="date" type="date"/></td>
+                <button type="submit" class="button" id="update" onclick="newEntry()">Update</button>
+              </tr>
+            </form> 
             <tr id="totalsRow">
               <td>Totals</td>
             </tr>
         </tbody>
       </table>
-      <button type="submit" class="button" id="update" onclick="newEntry()">Update</button>
       <br>
       
-      <form action="/api/fi-app" method="POST">
+
+      <br>
+      <form action="/api/fi-app" method="POST" id="addNew">
         <input name="newAsset" id="newAsset" type="text" placeholder="New Asset"/>
         <input name="newLiability" id="newLiability" type="text" placeholder="New Liability"/>
-
         <button type="submit" class="button" onclick="addNew()">Add New</button>
       </form>
       <br>

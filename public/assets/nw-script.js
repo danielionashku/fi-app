@@ -358,3 +358,28 @@ var myChart = new Chart(ctx, {
      },
     } 
 })
+
+
+$(function() {
+  $('#addNew').on('submit', function(e) {
+      var data = $("#addNew :input").serialize();
+      $.ajax({
+          type: "POST",
+          url: "/api/fi-app",
+          data: data,
+      });
+      e.preventDefault();
+  });
+});
+
+$(function() {
+  $('#nwValue').on('submit', function(e) {
+      var data = $("#nwValue :input").serialize();
+      $.ajax({
+          type: "POST",
+          url: "/api/fi-app",
+          data: data,
+      });
+      e.preventDefault();
+  });
+});
