@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 8080;
+const port = 3000;
 
 const mySQLString = process.env.CLEARDB_DATABASE_URL;
 const database = new Prohairesis(mySQLString);
@@ -17,8 +17,11 @@ app
   .use(express.static('public'))
   .use(express.urlencoded({ extended: false}))
   .use(express.json())
-  
-  
+
+  .get('/test', function(req, res){
+    res.send("WHEEE");
+   })
+
   .get('/api/fi-app', async(req,res) => {
     const users = await database.query(`
       SELECT
@@ -37,6 +40,7 @@ app
       }).join('')}
     `)
   })
+
 
   .post('/api/fi-app', async (req, res) => {
     const body = req.body;
@@ -63,7 +67,7 @@ app
   })
 
   // This doesnt work right now
-  // .post('/api/fi-app', async (req, res) => {
+  // .post('/api', async (req, res) => {
   //   const body = req.body;
 
   //   await database.execute(`

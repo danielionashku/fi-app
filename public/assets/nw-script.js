@@ -360,7 +360,7 @@ var myChart = new Chart(ctx, {
 })
 
 
-$(document).ready(function() {
+$(function() {
   $('#addNew').on('submit', function(e) {
       var data = $("#addNew :input").serialize();
       $.ajax({
@@ -372,7 +372,7 @@ $(document).ready(function() {
   });
 });
 
-$(document).ready(function() {
+$(function() {
   $('#nwValue').on('submit', function(e) {
       var data = $("#nwValue :input").serialize();
       $.ajax({
