@@ -81,7 +81,7 @@ function newAsset() {
     addIDtoTotalsRow.parentElement.innerHTML = "tbd"
   }
   // TODO: Set timer to ensure this doesnt run until after the data is stored in the backend
-  document.getElementById("newAsset").value = "";
+  // document.getElementById("newAsset").value = '';
 }
 
 function newLiability() {
@@ -101,22 +101,12 @@ function newLiability() {
     addIDtoTotalsRow.parentElement.innerHTML = "tbd"
   }
   // TODO: Set timer to ensure this doesnt run until after the data is stored in the backend
-  document.getElementById("newLiability").value = "";
+  // document.getElementById("newLiability").value = '';
 }
 
 function addNew() {
   newAsset();
   newLiability();
-
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(networth)
-  };
-  fetch('/api', options);
-  
 }
 
 // Iterates over every column and adds a new row for each one
@@ -370,11 +360,12 @@ var myChart = new Chart(ctx, {
 })
 
 
-// keeps the client on the same page after button is clicked
 $(function() {
   $('#addNew').on('submit', function(e) {
       var data = $("#addNew :input").serialize();
       $.ajax({
+          type: "POST",
+          url: "/api/fi-app",
           data: data,
       });
       e.preventDefault();
@@ -385,6 +376,8 @@ $(function() {
   $('#nwValue').on('submit', function(e) {
       var data = $("#nwValue :input").serialize();
       $.ajax({
+          type: "POST",
+          url: "/api/fi-app",
           data: data,
       });
       e.preventDefault();

@@ -38,7 +38,7 @@
               <td></td>
   
             </tr>
-            <form action="/api" method="POST" id="nwValue">
+            <form action="/api/fi-app" method="POST" id="nwValue">
               <tr id="inputRow">
                 <td><input name="date" id="date" type="date"/></td>
                 <button type="submit" class="button" id="update" onclick="newEntry()">Update</button>
@@ -53,14 +53,13 @@
       
 
       <br>
-      <form id="addNew">
+      <form action="/api/fi-app" method="POST" id="addNew">
         <input name="newAsset" id="newAsset" type="text" placeholder="New Asset"/>
         <input name="newLiability" id="newLiability" type="text" placeholder="New Liability"/>
         <button type="submit" class="button" onclick="addNew()">Add New</button>
       </form>
       <br>
 
-  </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="./assets/nw-script.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
