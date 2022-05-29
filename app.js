@@ -18,13 +18,29 @@ app
   .use(express.urlencoded({ extended: true}))
   .use(express.json())
 
+  // adds new assets or liabilities
   .post('/api', (req, res) => {
-    console.log(req.body);
     const networth = req.body;
+    const timestamp = Date.now();
+    networth.timestamp = timestamp;
     database.insert(networth);
-    res.json({
-      status: 'success'
-    });
+    res.json(networth);
+  })
+
+  // adds new date & value entries for each asset or liability
+  .post('/entries', (req, res) => {
+    const networth = req.body;
+    const timestamp = Date.now();
+    networth.timestamp = timestamp;
+    database.insert(networth);
+    res.json(networth);
+  })
+
+  // loads the latest networth data 
+  .get('/api', (req, res) => {
+    database.find({}).sort({"timestamp":-1}).limit(1).exec( function (err, data) {
+      res.json(data[0])
+    })
   })
 
   .listen(port, () => console.log(`Server listening on port ${port}`));

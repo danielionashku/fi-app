@@ -1,23 +1,42 @@
 var ctx = document.getElementById('myChart');
 
-var networth = {
-  "assets": {},
-  "liabilities": {}
+// when page loads, this retrieves the data from the database.db file. it retrieves all data from the file. may need future update to exclude non nw data
+
+getNW();
+async function getNW() {
+  const response = await fetch('/api');
+  dbnw = await response.json();
+  nw = dbnw;
+  updateChart(myChart);
+  addTotals(nw.networth.assets);
+  addTotals(nw.networth.liabilities);
+  totalAssets(nw.networth.assets);
+  totalLiabilities(nw.networth.liabilities);
+  // looks like i have to delete these properties, otherwise my post methods don't work for some reason. 
+  delete nw.timestamp;
+  delete nw._id;
 }
 
+// this may be redundant at this point since it is overriden in the getNW() function that is called on page load. keeping for now 
+var nw = {
+  "networth": {
+    "assets": {},
+    "liabilities": {}
+  }
+}
 var dates = {}
 
 var assetTotals = {};
 var nwTable = document.getElementById("nwTable");
-var numAssets = Object.keys(networth.assets).length;
-var numLiabilities = Object.keys(networth.liabilities).length;
+var numAssets = Object.keys(nw.networth.assets).length;
+var numLiabilities = Object.keys(nw.networth.liabilities).length;
 
 function orderAssets() {
   var orderedAssets = {}
-  for (prop in networth.assets) {
-  orderedAssets[prop] = Object.keys(networth.assets[prop]).sort().reduce(
+  for (prop in nw.networth.assets) {
+  orderedAssets[prop] = Object.keys(nw.networth.assets[prop]).sort().reduce(
       (obj, key) => { 
-        obj[key] = networth.assets[prop][key];
+        obj[key] = nw.networth.assets[prop][key];
         return obj;
       }, 
       {}
@@ -28,10 +47,10 @@ function orderAssets() {
 
 function orderLiabilities() {
   var orderedLiabilities = {}
-  for (prop in networth.liabilities) {
-  orderedLiabilities[prop] = Object.keys(networth.liabilities[prop]).sort().reduce(
+  for (prop in nw.networth.liabilities) {
+  orderedLiabilities[prop] = Object.keys(nw.networth.liabilities[prop]).sort().reduce(
       (obj, key) => { 
-        obj[key] = networth.liabilities[prop][key];
+        obj[key] = nw.networth.liabilities[prop][key];
         return obj;
       }, 
       {}
@@ -69,7 +88,7 @@ function newAsset() {
   if (newAsset == !isNaN) {
     console.log("Please Enter Asset");
   } else {
-    networth.assets[newAsset] = {...dates};
+    nw.networth.assets[newAsset] = {...dates};
     addColumn('newAsset');
     var addIDtoNewInput = document.querySelector('table tr:nth-last-child(2) td:last-child input')
     addIDtoNewInput.style.backgroundColor = "red";
@@ -89,7 +108,7 @@ function newLiability() {
   if (newLiability == !isNaN) {
     console.log("Please Enter Liability");
   } else {
-    networth.liabilities[newLiability] = {...dates};
+    nw.networth.liabilities[newLiability] = {...dates};
     addColumn('newLiability');
     var addIDtoNewInput = document.querySelector('table tr:nth-last-child(2) td:last-child input')
     addIDtoNewInput.style.backgroundColor = "red";
@@ -113,10 +132,9 @@ function addNew() {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(networth)
+    body: JSON.stringify(nw)
   };
   fetch('/api', options);
-  
 }
 
 // Iterates over every column and adds a new row for each one
@@ -146,35 +164,45 @@ function newEntry() {
         var itemBalance = $(`#${cID}`)[0].value;
         if (itemBalance == !isNaN) {
           console.log(`${cID} Balance is Empty`);
-          if (Object.values(networth)[0].hasOwnProperty(`${cID}`) === true) {
-            networth.assets[cID][date] = 0;
-          } else if (Object.values(networth)[1].hasOwnProperty(`${cID}`) === true) {
-            networth.liabilities[cID][date] = 0;
+          if (Object.values(nw.networth)[0].hasOwnProperty(`${cID}`) === true) {
+            nw.networth.assets[cID][date] = 0;
+          } else if (Object.values(nw.networth)[1].hasOwnProperty(`${cID}`) === true) {
+            nw.networth.liabilities[cID][date] = 0;
           }
         } else {
-          if (Object.values(networth)[0].hasOwnProperty(`${cID}`) === true) {
-            networth.assets[cID][date] = parseInt(itemBalance);
-          } else if (Object.values(networth)[1].hasOwnProperty(`${cID}`) === true) {
-            networth.liabilities[cID][date] = parseInt(itemBalance);
+          if (Object.values(nw.networth)[0].hasOwnProperty(`${cID}`) === true) {
+            nw.networth.assets[cID][date] = parseInt(itemBalance);
+          } else if (Object.values(nw.networth)[1].hasOwnProperty(`${cID}`) === true) {
+            nw.networth.liabilities[cID][date] = parseInt(itemBalance);
           }
         }
       }
       addRow();
-      addTotals(networth.assets);
-      addTotals(networth.liabilities);
-      totalAssets(networth.assets);
-      totalLiabilities(networth.liabilities);
-      if (Object.keys(networth.assets).length > 0) {
-        networth.assets = orderAssets();
+      addTotals(nw.networth.assets);
+      addTotals(nw.networth.liabilities);
+      totalAssets(nw.networth.assets);
+      totalLiabilities(nw.networth.liabilities);
+      if (Object.keys(nw.networth.assets).length > 0) {
+        nw.networth.assets = orderAssets();
         dates = orderDates();
       }
-      if (Object.keys(networth.liabilities).length > 0) {
-        networth.liabilities = orderLiabilities();
+      if (Object.keys(nw.networth.liabilities).length > 0) {
+        nw.networth.liabilities = orderLiabilities();
         dates = orderDates();
       }
       updateChart(myChart);
     }
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(nw),
+  };
+  fetch('/entries', options);
 }
+
 
 // This adds the total for the column, but does not add the totals from a row.
 function addTotals(obj) {
@@ -194,7 +222,7 @@ function addTotals(obj) {
   }
 }
 
-// Returns the last date and value for all assets (pass "networth.assets" into the function)
+// Returns the last date and value for all assets (pass "nw.networth.assets" into the function)
 function totalAssets(obj) {
   var i = 0;
   var name = [];
@@ -215,7 +243,7 @@ function totalAssets(obj) {
     document.getElementById("assets").innerHTML = `Total Assets: $${totalAssets}`;
 }
 
-// Returns the last date and value for all liabilities (pass "networth.liabilities" into the function)
+// Returns the last date and value for all liabilities (pass "nw.networth.liabilities" into the function)
 function totalLiabilities(obj) {
   var i = 0;
   var name = [];
@@ -244,7 +272,7 @@ Chart.pluginService.register({
   beforeInit: function(chart) {
     var data = chart.config.data;
     var i = 0;
-    for (prop in networth.assets) {
+    for (prop in nw.networth.assets) {
       data.datasets.push({
         label: prop,
         fill: true,
@@ -252,13 +280,13 @@ Chart.pluginService.register({
         // borderColor:
         data: [],
       })
-      for (var key in networth.assets[prop]) {
-        if (networth.assets[prop].hasOwnProperty(key)) {
-        data.datasets[i].data.push(networth.assets[prop][key]);
+      for (var key in nw.networth.assets[prop]) {
+        if (nw.networth.assets[prop].hasOwnProperty(key)) {
+          data.datasets[i].data.push(nw.networth.assets[prop][key]);
         }
       }
     }
-    for (prop in networth.liabilities) {
+    for (prop in nw.networth.liabilities) {
       data.datasets.push({
         label: prop,
         fill: true,
@@ -266,9 +294,9 @@ Chart.pluginService.register({
         // borderColor:
         data: [],
       })
-      for (var key in networth.liabilities[prop]) {
-        if (networth.liabilities[prop].hasOwnProperty(key)) {
-        data.datasets[i].data.push(networth.liabilities[prop][key]);
+      for (var key in nw.networth.liabilities[prop]) {
+        if (nw.networth.liabilities[prop].hasOwnProperty(key)) {
+          data.datasets[i].data.push(nw.networth.liabilities[prop][key]);
         }
       }
     } i++;
@@ -277,14 +305,14 @@ Chart.pluginService.register({
 
 // Updates the chart with new data
 function updateChart(chart) {
-  for (prop in networth.assets) {
+  for (prop in nw.networth.assets) {
     chart.data.datasets.pop({
       label: prop,
       fill: true,
       data: [],
     })
   }
-  for (prop in networth.liabilities) {
+  for (prop in nw.networth.liabilities) {
     chart.data.datasets.pop({
       label: prop,
       fill: true,
@@ -292,7 +320,7 @@ function updateChart(chart) {
     })
   }
   var i = 0
-  for (prop in networth.assets) {
+  for (prop in nw.networth.assets) {
     chart.data.labels = Object.getOwnPropertyNames(dates)
     chart.data.datasets.push({
       label: prop,
@@ -301,14 +329,14 @@ function updateChart(chart) {
       // borderColor:
       data: [],
     })
-    for (var key in networth.assets[prop]) {
+    for (var key in nw.networth.assets[prop]) {
       chart.data.labels = Object.getOwnPropertyNames(dates)
-      chart.data.datasets[i].data.push(networth.assets[prop][key]); 
+      chart.data.datasets[i].data.push(nw.networth.assets[prop][key]); 
     }
     i++;
   }
   var n = i;
-  for (prop in networth.liabilities) {
+  for (prop in nw.networth.liabilities) {
     chart.data.labels = Object.getOwnPropertyNames(dates)
     chart.data.datasets.push({
       label: prop,
@@ -317,9 +345,9 @@ function updateChart(chart) {
       // borderColor:
       data: [],
     })
-    for (var key in networth.liabilities[prop]) {
+    for (var key in nw.networth.liabilities[prop]) {
       chart.data.labels = Object.getOwnPropertyNames(dates)
-      chart.data.datasets[n].data.push(networth.liabilities[prop][key]); 
+      chart.data.datasets[n].data.push(nw.networth.liabilities[prop][key]); 
     }
     n++;
   }
@@ -373,9 +401,9 @@ var myChart = new Chart(ctx, {
 // keeps the client on the same page after button is clicked
 $(function() {
   $('#addNew').on('submit', function(e) {
-      var data = $("#addNew :input").serialize();
+      var datax = $("#addNew :input").serialize();
       $.ajax({
-          data: data,
+          datax: datax,
       });
       e.preventDefault();
   });
@@ -383,9 +411,9 @@ $(function() {
 
 $(function() {
   $('#nwValue').on('submit', function(e) {
-      var data = $("#nwValue :input").serialize();
+      var datax = $("#nwValue :input").serialize();
       $.ajax({
-          data: data,
+          datax: datax,
       });
       e.preventDefault();
   });
