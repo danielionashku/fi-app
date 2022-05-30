@@ -1,12 +1,22 @@
 var ctx = document.getElementById('myChart');
 
-// when page loads, this retrieves the data from the database.db file. it retrieves all data from the file. may need future update to exclude non nw data
+var dates = {}
 
+// when page loads, this retrieves the data from the database.db file. it retrieves all data from the file. may need future update to exclude non nw data
 getNW();
 async function getNW() {
   const response = await fetch('/api');
   dbnw = await response.json();
   nw = dbnw;
+
+  // creates the dates object based on whats already in the db 
+  for (prop in dbnw.networth.assets) {
+    dbdates = (Object.keys(dbnw.networth.assets[prop]))
+    }  
+    for (let i = 0; i < dbdates.length; i++) {
+      dates[(dbdates[i])] = 0;
+    }
+  console.log("Recorded Dates: " + Object.getOwnPropertyNames(dates))
   updateChart(myChart);
   addTotals(nw.networth.assets);
   addTotals(nw.networth.liabilities);
@@ -24,7 +34,7 @@ var nw = {
     "liabilities": {}
   }
 }
-var dates = {}
+
 
 var assetTotals = {};
 var nwTable = document.getElementById("nwTable");
