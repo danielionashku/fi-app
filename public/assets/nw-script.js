@@ -13,7 +13,7 @@ async function getNW() {
   for (prop in dbnw.networth.assets) {
     dbdates = (Object.keys(dbnw.networth.assets[prop]))
     }  
-    for (let i = 0; i < dbdates.length; i++) {
+  for (let i = 0; i < dbdates.length; i++) {
       dates[(dbdates[i])] = 0;
     }
   console.log("Recorded Dates: " + Object.getOwnPropertyNames(dates))
@@ -22,9 +22,23 @@ async function getNW() {
   addTotals(nw.networth.liabilities);
   totalAssets(nw.networth.assets);
   totalLiabilities(nw.networth.liabilities);
-  // looks like i have to delete these properties, otherwise my post methods don't work for some reason. 
+
+  // looks like i have to delete these properties, otherwise the post methods don't work for some reason. 
   delete nw.timestamp;
   delete nw._id;
+  
+  // returns an array of assets & liabilites that can then be used to create table columns
+  // enabling this will allow new columns to be created but it breaks the input row logic. 
+  // next step depends on how we choose to proceed. i think i should switch to SQL and learn PHP
+
+//   assetsArray = (Object.keys(dbnw.networth.assets))
+//   liabilitiesArray = (Object.keys(dbnw.networth.liabilities))
+//   for (var i = 0; i < assetsArray.length; i++) {
+//     createTableColumns(assetsArray[i])
+//   }
+//   for (var i = 0; i < liabilitiesArray.length; i++) {
+//     createTableColumns(liabilitiesArray[i])
+//   }
 }
 
 // this may be redundant at this point since it is overriden in the getNW() function that is called on page load. keeping for now 
@@ -35,11 +49,24 @@ var nw = {
   }
 }
 
-
 var assetTotals = {};
 var nwTable = document.getElementById("nwTable");
 var numAssets = Object.keys(nw.networth.assets).length;
 var numLiabilities = Object.keys(nw.networth.liabilities).length;
+
+// create table columns based on existing data
+function createTableColumns(colName) {
+  [...document.querySelectorAll('#nwTable tr')].forEach((row, i) => {
+      const input = document.createElement("input")
+      input.setAttribute('type', 'number')
+      const cell = document.createElement(i ? "td" : "td")
+      cell.appendChild(input)
+      row.appendChild(cell)
+      var colTitle = document.getElementById("nwTable").rows[0].cells[row.cells.length-1];
+      colTitle.innerHTML = colName;
+  });
+}
+
 
 function orderAssets() {
   var orderedAssets = {}
@@ -212,7 +239,6 @@ function newEntry() {
   };
   fetch('/entries', options);
 }
-
 
 // This adds the total for the column, but does not add the totals from a row.
 function addTotals(obj) {
@@ -406,7 +432,6 @@ var myChart = new Chart(ctx, {
      },
     } 
 })
-
 
 // keeps the client on the same page after button is clicked
 $(function() {
